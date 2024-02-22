@@ -20,7 +20,7 @@ app.use(express.static("public"));
 app.use(express.json());
 
 // Rutas
-app.use("/user", require("./routes/createRoute"));
+app.use("/user", require("./routes/userRoute"));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.get("*", (req, res) => {
