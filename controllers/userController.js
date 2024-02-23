@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const bcryptjs = require("bcryptjs");
 
 const postUser = async (req, res) => {
   try {
@@ -20,12 +21,15 @@ const postUser = async (req, res) => {
       permissions,
     } = req.body;
 
-    const existingUser = await User.find({ $or: [{ email }, { userName }] });
-    if (existingUser.length > 0) {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
       return res
         .status(400)
         .json({ success: false, message: "El usuario ya está registrado" });
     }
+
+    const salt = bcryptjs.genSaltSync();
+    const hashedPassword = bcryptjs.hashSync(password, salt);
 
     const newUser = new User({
       name,
@@ -35,7 +39,7 @@ const postUser = async (req, res) => {
       gender,
       userName,
       email,
-      password,
+      password: hashedPassword,
       admissionDate,
       departureDate,
       payroll,
@@ -60,6 +64,27 @@ const postUser = async (req, res) => {
   }
 };
 
+const getUsers = async (req, res) => {
+  try {
+    const [total, users] = await Promise.all([
+      User.countDocuments(),
+      User.find(),
+    ]);
+    res.json({
+      success: true,
+      total,
+      users,
+    });
+  } catch (error) {
+    console.error("Error al obtener los usuarios", error.message);
+    res.status(500).json({
+      success: false,
+      error: "Error interno del servidor",
+    });
+  }
+};
+
 module.exports = {
   postUser,
+  getUsers,
 };

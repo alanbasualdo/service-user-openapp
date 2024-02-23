@@ -21,6 +21,7 @@ app.use(express.json());
 
 // Rutas
 app.use("/user", require("./routes/userRoute"));
+app.use("/auth", require("./routes/authRoute"));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.get("*", (req, res) => {

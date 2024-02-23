@@ -47,6 +47,10 @@ const userSchema = new Schema(
     permissions: {
       type: String,
     },
+    state: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     timestamps: true,
