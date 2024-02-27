@@ -54,10 +54,10 @@ const postUser = async (req, res) => {
     res.status(201).json({
       success: true,
       message: "Usuario creado exitosamente",
-      data: newUser,
+      newUser,
     });
   } catch (error) {
-    console.error("Error creando usuario:", error);
+    console.error("Error creando usuario:", error.message);
     res
       .status(500)
       .json({ success: false, message: "Hubo un error al crear el usuario" });
